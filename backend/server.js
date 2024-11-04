@@ -1,5 +1,6 @@
-import express from 'express'
-import cors from 'cors'
+import express from 'express';
+import cors from 'cors';
+import fs from 'fs';
 
 const server = express();
 const PORT = 4000;
@@ -7,35 +8,21 @@ const PORT = 4000;
 // Middleware
 server.use(cors());
 
-let todos = [
-  {
-    "userId": 1,
-    "id": 1,
-    "title": "delectus aut autem",
-    "completed": false
-  },
-  {
-    "userId": 1,
-    "id": 2,
-    "title": "quis ut nam facilis et officia qui",
-    "completed": false
-  },
-  {
-    "userId": 1,
-    "id": 3,
-    "title": "fugiat veniam minus",
-    "completed": false
+let todos = [];
+
+// Todos aus der JSON-Datei lesen
+fs.readFile('todos.json', 'utf8', (err, data) => {
+  if (err) {
+    console.error('Error reading todos.json', err);
+    return;
   }
-]
-
-
+  todos = JSON.parse(data);
+});
 
 server.get("/todos", (req, res) => {
-    console.log("Ich bekomme ein Get")
-    res.json(todos)
-})
+    console.log("Ich bekomme ein Get");
+    res.json(todos);
+});
 
-
-
-console.log("Server Online")
-server.listen(PORT)
+console.log("Server Online");
+server.listen(PORT);
